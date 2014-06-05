@@ -5,14 +5,14 @@
  */
 
 /*
-* define counter field name for field and instance
-*/
+ * define counter field name for field and instance
+ */
 define('DRUPALHUB_NODE_COUNT_FIELDNAME', 'drupalhub_node_count');
 
 /*
-* Implements hook_menu().
-* Add adninistration page for node counter.
-*/
+ * Implements hook_menu().
+ * Add adninistration page for node counter.
+ */
 function drupalhub_node_count_menu() {
   return array(
     'admin/config/drupalhub_node_count' => array(
@@ -40,29 +40,30 @@ function drupalhub_node_count_permission() {
  *
  * Increasing drupalhub_node_count if node is viewing in full mode.
  * Excluding author viewing.
- */ 
+ */
 function drupalhub_node_count_node_view($node, $view_mode, $langcode) {
   if ($view_mode == 'full') {
     global $user;
     if ($user->uid != $node->uid) {
       $node_wrap = entity_metadata_wrapper('node', $node);
       if (array_key_exists(DRUPALHUB_NODE_COUNT_FIELDNAME, $node_wrap->getPropertyInfo())) {
-          $node_wrap->drupalhub_node_count = $node_wrap->drupalhub_node_count->value() + 1;
-          $node_wrap->save();
-        }
+        $node_wrap->drupalhub_node_count = $node_wrap->drupalhub_node_count->value() + 1;
+        $node_wrap->save();
       }
     }
+  }
 }
 
 /**
  * Implements hook_field_access().
+ *
  * Prevent user from edit count field manually.
  */
 function drupalhub_node_count_field_access($op, $field, $entity_type, $entity, $account) {
-  if ($field['field_name'] == DRUPALHUB_NODE_COUNT_FIELDNAME && user_access('administer drupalhub node count') && $op == 'edit' && $field['field_name'] == DRUPALHUB_NODE_COUNT_FIELDNAME ) {
+  if ($field['field_name'] == DRUPALHUB_NODE_COUNT_FIELDNAME && user_access('administer drupalhub node count') && $op == 'edit' && $field['field_name'] == DRUPALHUB_NODE_COUNT_FIELDNAME) {
     return FALSE;
-    }
   }
+}
 
 /*
  * Form constructor for administeration which nodes type would have counter.
@@ -82,8 +83,8 @@ function drupalhub_node_count_add_remove_form($form, &$form_state) {
     $remove = array();
     $all_nodetypes = node_type_get_types();
     foreach ($all_nodetypes as $type => $type_info) {
-      //Find all content types with node count field,
-      //add them to remove options.
+      // Find all content types with node count field,
+      // add them to remove options.
       if (field_info_instance('node', DRUPALHUB_NODE_COUNT_FIELDNAME, $type)) {
         $remove[$type] = $type;
         }
@@ -117,15 +118,15 @@ function drupalhub_node_count_add_remove_form($form, &$form_state) {
     return $form;
     }
   else {
-    //Filter all values with value : 0
+    // Filter all values with value : 0
     $node_types = array_filter($form_state['values']['remove']);
     $node_types_html = '<ul><li>' . implode('</li><li>', $node_types) . '</li></ul>';
-    //Store node_types for confirmation form
+    // Store node_types for confirmation form
     $form['remeber_node_types'] = array(
       '#type' => 'hidden',
       '#value' => implode(' ', $node_types),
       );
-    return confirm_form($form, t('Are you sure you want to remove node count?'), 'admin/config/drupalhub_node_count', '<p>This action will remove  permanently all node counts for this type:</p>' . $node_types_html, t('Remove') );
+    return confirm_form($form, t('Are you sure you want to remove node count?'), 'admin/config/drupalhub_node_count', '<p>This action will remove  permanently all node counts for this type:</p>' . $node_types_html, t('Remove'));
     }
  
   }
@@ -141,15 +142,15 @@ function drupalhub_node_count_add_remove_form($form, &$form_state) {
  */
 function drupalhub_node_count_form_add_remove_submit(&$form, &$form_state) {
   if ($form_state['values']['op'] == t('Remove')) {
-    //If user trys to remove count field
+    // If user trys to remove count field
     if (!isset($form_state['storage']['confirm'])) {
-      //If confirm not set, we are before confirmation form
+      // If confirm not set, we are before confirmation form
       $form_state['storage']['confirm'] = TRUE;
       $form_state['rebuild'] = TRUE;
       }
     else {
-      //If confirm is set, we are after confirmation form
-      //remeber_node_types remembers user choise
+      // If confirm is set, we are after confirmation form
+      // remeber_node_types remembers user choise
       $node_types = explode(' ', $form_state['values']['remeber_node_types']);
       foreach ($node_types as $node_type) {
          if ($instance =  field_info_instance('node', DRUPALHUB_NODE_COUNT_FIELDNAME, $node_type) ) {
@@ -167,8 +168,8 @@ function drupalhub_node_count_form_add_remove_submit(&$form, &$form_state) {
   }
 
 /*
-* Add the counter field.
-*/
+ * Add the counter field.
+ */
 function _drupalhub_node_count_add_field() {
   if ( ! field_info_field(DRUPALHUB_NODE_COUNT_FIELDNAME) ) {
       $field = array(
@@ -183,15 +184,15 @@ function _drupalhub_node_count_add_field() {
   }
 
 /*
-* Add the counter field instance to node bundle
-*
-* @param (string) $type node type machine name
-*
-* @return TRUE if instance added, NULL if instance already exists and FALSE if $type is wrong
-*/
+ * Add the counter field instance to node bundle
+ *
+ * @param (string) $type node type machine name
+ *
+ * @return TRUE if instance added, NULL if instance already exists and FALSE if $type is wrong
+ */
 function _drupalhub_node_count_add_instance($type) {
-  if (!$type || !array_key_exists($type, nodwe_type_get_types())) {
-    //missing or wrong node type
+  if (!$type || !array_key_exists($type, node_type_get_types())) {
+    // missing or wrong node type
     return FALSE;
     }
   if ( ! field_info_field(DRUPALHUB_NODE_COUNT_FIELDNAME) ) {
