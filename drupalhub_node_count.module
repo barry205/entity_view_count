@@ -13,8 +13,6 @@ define('DRUPALHUB_NODE_COUNT_FIELDNAME', 'drupalhub_node_count');
 
 /**
  * Implements hook_menu().
- *
- * Add adninistration page for node counter.
  */
 function drupalhub_node_count_menu() {
   return array(
@@ -72,11 +70,7 @@ function drupalhub_node_count_field_access($op, $field, $entity_type, $entity, $
 /**
  * Form constructor for administeration which nodes type would have counter.
  *
- *
- *
  * @see drupalhub_node_count_form_add_remove_submit()
- *
- * @ingroup forms
  */
 function drupalhub_node_count_add_remove_form($form, &$form_state) {
   $form = array();
@@ -124,7 +118,7 @@ function drupalhub_node_count_add_remove_form($form, &$form_state) {
   else {
     // Filter all values with value : 0
     $node_types = array_filter($form_state['values']['remove']);
-    $node_types_html = '<ul><li>' . implode('</li><li>', $node_types) . '</li></ul>';
+    $node_types_html =  theme_item_list( $node_types);
     // Store node_types for confirmation form.
     $form['remeber_node_types'] = array(
       '#type' => 'hidden',
