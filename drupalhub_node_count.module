@@ -6,7 +6,7 @@
  */
 
 /*
- * define counter field name for field and instance
+ * Define counter field name for field and instance.
  */
 
 define('DRUPALHUB_NODE_COUNT_FIELDNAME', 'drupalhub_node_count');
@@ -132,7 +132,7 @@ function drupalhub_node_count_add_remove_form($form, &$form_state) {
  * Form validation handler for drupalhub_node_count_add_remove_form().
  *
  * Check for ops. If op is remove generate confirmation form,
- * because the remove action can not roll back.
+ * Because the remove action can not roll back.
  *
  * @see drupalhub_node_count_add_remove_form()
  */
