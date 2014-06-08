@@ -9,6 +9,7 @@
  * Define counter field name for field and instance.
  */
 
+
 define('DRUPALHUB_NODE_COUNT_FIELDNAME', 'drupalhub_node_count');
 
 /**
@@ -79,15 +80,15 @@ function drupalhub_node_count_add_remove_form($form, &$form_state) {
   if (!isset($form_state['storage']['confirm'])) {
     $add = array();
     $remove = array();
-    $all_nodetypes = node_type_get_types();
-    foreach ($all_nodetypes as $type => $type_info) {
+    $all_node_types = node_type_get_types();
+    foreach ($all_node_types as $type => $type_info) {
       // Find all content types with node count field,
       // add them to remove options.
       if (field_info_instance('node', DRUPALHUB_NODE_COUNT_FIELDNAME, $type)) {
-        $remove[$type] = $type;
+        $remove[$type] = $type_info->name;
       }
       else {
-        $add[$type] = $type;
+        $add[$type] = $type_info->name;
       }
     }
 
@@ -117,12 +118,17 @@ function drupalhub_node_count_add_remove_form($form, &$form_state) {
   }
   else {
     // Filter all values with value : 0
-    $node_types = array_filter($form_state['values']['remove']);
-    $node_types_html =  theme('item_list', array('items'=> $node_types));
+    $selected_node_types = array_filter($form_state['values']['remove']);
+    $all_node_types = node_type_get_types();
+    $node_types = array();
+    foreach ($selected_node_types as $node_type) {
+      $node_types[] = $all_node_types[$node_type]->name;
+    }
+    $node_types_html = theme('item_list', array('items' => $node_types));
     // Store node_types for confirmation form.
     $form['remeber_node_types'] = array(
       '#type' => 'hidden',
-      '#value' => implode(' ', $node_types),
+      '#value' => implode(' ', $selected_node_types),
     );
     return confirm_form($form, t('Are you sure you want to remove node count?'), 'admin/config/drupalhub_node_count', '<p>This action will remove  permanently all node counts for this type:</p>' . $node_types_html, t('Remove'));
   }
@@ -224,3 +230,4 @@ function _drupalhub_node_count_add_instance($type) {
     return NULL;
   }
 }
+
