@@ -118,7 +118,7 @@ function drupalhub_node_count_add_remove_form($form, &$form_state) {
   else {
     // Filter all values with value : 0
     $node_types = array_filter($form_state['values']['remove']);
-    $node_types_html =  theme_item_list( $node_types);
+    $node_types_html =  theme('item_list', array('items'=> $node_types));
     // Store node_types for confirmation form.
     $form['remeber_node_types'] = array(
       '#type' => 'hidden',
