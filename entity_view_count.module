@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Code for entity view count.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function entity_view_count_menu() {
+  return array(
+    'admin/config/entity_view_count' => array(
+      'title' => 'node count configurations',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('entity_view_count_add_remove_form'),
+      'access arguments' => array('administer drupalhub node count'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_permission().
+ */
+function entity_view_count_permission() {
+  return array(
+    'administer drupalhub node count' => array(
+      'title' => t('Administer drupalhub node count'),
+      'description' => t('Decide which nodes would have views counter'),
+    ),
+  );
+}
+
+/**
+ * Implement hook_entity_info().
+ */
+function entity_view_count_entity_info() {
+  $info = array();
+
+  $info['entity_view_count'] = array(
+    'label' => t('Entity view count'),
+    'base table' => 'entity_view_count',
+    'entity class' => 'EntityViewCount',
+    'controller class' => 'EntityAPIController',
+    'entity keys' => array(
+      'id' => 'id',
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function entity_view_count_entity_view($entity, $type, $view_mode, $langcode) {
+}

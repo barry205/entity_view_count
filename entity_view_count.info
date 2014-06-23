@@ -1,0 +1,10 @@
+name = Entity view count
+description = Tracking view count for entity
+core = 7.x
+package = DrupalHub
+
+dependencies[] = entity
+dependencies[] = entityreference
+
+files[] = includes/EntityViewCount.php
+files[] = includes/Controller.php

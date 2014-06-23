@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Install file for the entity view count module.
+ */
+
+/**
+ * Implement hook_schema().
+ */
+function entity_view_count_install() {
+  $schema = array();
+
+  $schema['entity_view_count'] = array(
+    'description' => 'Base table for the entity view count module.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The identifier for the schema.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'entity_type' => array(
+        'description' => 'The entity type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'entity_id' => array(
+        'description' => 'The entity identifier.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'created' => array(
+        'description' => 'The Unix timestamp when the entity was viewed.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'uid' => array(
+        'description' => 'The {users}.uid that viewed the entity.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'foreign keys' => array(
+      'viewer' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
