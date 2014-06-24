@@ -11,8 +11,9 @@
 function entity_view_count_menu() {
   $items = array();
 
-  $items['admin/config/entity_view_count'] = array(
+  $items['admin/config/system/entity_view_count'] = array(
     'title' => 'Entity view count settings',
+    'description' => 'Settings for the Entity view count module.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('entity_view_count_settings'),
     'access arguments' => array('administer entity view count entries'),
@@ -62,6 +63,21 @@ function entity_view_count_entity_info() {
  *  Return non-saved object of entity view count.
  */
 function entity_view_count_create(array $params) {
+  global $user;
+
+  if (isset($params['entity']) ) {
+    $wrapper = entity_metadata_wrapper($params['entity_type'], $params['entity']);
+    $params['entity_id'] = $wrapper->getIdentifier();
+
+    // Remove the entity key.
+    unset($params['entity']);
+  }
+
+  $params += array(
+    'created' => REQUEST_TIME,
+    'uid' => $user->uid,
+  );
+
   return entity_create('entity_view_count', $params);
 }
 
@@ -104,4 +120,55 @@ function entity_view_count_delete_multiple($ids) {
  * Implements hook_entity_view().
  */
 function entity_view_count_entity_view($entity, $type, $view_mode, $langcode) {
+  entity_view_count_create(array('entity_type' => $type, 'entity' => $entity))->save();
+}
+
+/**
+ * Form callback; Set the settings for the module.
+ */
+function entity_view_count_settings($form, $form_state) {
+  $form['visibility'] = array(
+    '#type' => 'vertical_tabs',
+  );
+
+  $entities = entity_get_info();
+
+  foreach ($entities as $name => $entity) {
+    if (empty($entity['view modes'])) {
+      continue;
+    }
+
+    $form['track'][$name] = array(
+      '#type' => 'fieldset',
+      '#title' => $entity['label'],
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#group' => 'visibility',
+      '#weight' => 0,
+    );
+
+    $selected = variable_get('entity_view_count_track_' . $name, array());
+
+    $default_views = array();
+
+    foreach ($selected as $view_mode_name => $select) {
+      if (!$select) {
+        continue;
+      }
+
+      $default_views[] = $view_mode_name;
+    }
+
+    $form['track'][$name]['entity_view_count_track_' . $name] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Select which view modes will be counted as viewed'),
+      '#default_value' => $default_views,
+    );
+
+    foreach ($entity['view modes'] as $view_mode_name => $info) {
+      $form['track'][$name]['entity_view_count_track_' . $name]['#options'][$view_mode_name] = $info['label'];
+    }
+  }
+
+  return system_settings_form($form);
 }

@@ -57,3 +57,14 @@ function entity_view_count_schema() {
 
   return $schema;
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+function entity_view_count_uninstall() {
+  $entities = array_keys(entity_get_info());
+
+  foreach ($entities as $entity) {
+    variable_del('entity_view_count_track_' . $entity);
+  }
+}
