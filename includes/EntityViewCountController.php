@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class Controller
+ * Class EntityViewCountController
  *
  * Holds the controller for the entity view count module.
  */
-class Controller {
+class EntityViewCountController {
 
   /**
    * Check if the entity was already viewed.

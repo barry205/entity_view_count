@@ -9,14 +9,16 @@
  * Implements hook_menu().
  */
 function entity_view_count_menu() {
-  return array(
-    'admin/config/entity_view_count' => array(
-      'title' => 'node count configurations',
-      'page callback' => 'drupal_get_form',
-      'page arguments' => array('entity_view_count_add_remove_form'),
-      'access arguments' => array('administer drupalhub node count'),
-    ),
+  $items = array();
+
+  $items['admin/config/entity_view_count'] = array(
+    'title' => 'Entity view count settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('entity_view_count_settings'),
+    'access arguments' => array('administer entity view count entries'),
   );
+
+  return $items;
 }
 
 /**
@@ -24,9 +26,9 @@ function entity_view_count_menu() {
  */
 function entity_view_count_permission() {
   return array(
-    'administer drupalhub node count' => array(
-      'title' => t('Administer drupalhub node count'),
-      'description' => t('Decide which nodes would have views counter'),
+    'administer entity view count entries' => array(
+      'title' => t('Administer entity view count entries'),
+      'description' => t('Grant permission to manage entity view count entries'),
     ),
   );
 }
@@ -48,6 +50,54 @@ function entity_view_count_entity_info() {
   );
 
   return $info;
+}
+
+/**
+ * Create entity view count.
+ *
+ * @param Array $params
+ *  Array of with default arrays.
+ *
+ * @return EntityViewCount
+ *  Return non-saved object of entity view count.
+ */
+function entity_view_count_create(array $params) {
+  return entity_create('entity_view_count', $params);
+}
+
+/**
+ * Load entity view count.
+ *
+ * @param Integer $id
+ *  The entry ID.
+ *
+ * @return EntityViewCount
+ *  The object from the DB.
+ */
+function entity_view_count_load($id) {
+  return entity_load_single('entity_view_count', $id);
+}
+
+/**
+ * Load multiple object from the db.
+ *
+ * @param Array $ids
+ *  List of entity IDs.
+ *
+ * @return EntityViewCount[]
+ */
+function entity_view_count_load_multiple(array $ids) {
+  return entity_load('entity_view_count', $ids);
+}
+
+/**
+ * Delete multiple entity view count entries from the DB.
+ *
+ * @param Integer $ids
+ *  List of ids.s
+ */
+function entity_view_count_delete_multiple($ids) {
+  entity_delete_multiple('entity_view_count', $ids);
 }
 
 /**

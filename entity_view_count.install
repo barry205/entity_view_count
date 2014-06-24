@@ -8,7 +8,7 @@
 /**
  * Implement hook_schema().
  */
-function entity_view_count_install() {
+function entity_view_count_schema() {
   $schema = array();
 
   $schema['entity_view_count'] = array(
