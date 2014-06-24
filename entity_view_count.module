@@ -120,6 +120,12 @@ function entity_view_count_delete_multiple($ids) {
  * Implements hook_entity_view().
  */
 function entity_view_count_entity_view($entity, $type, $view_mode, $langcode) {
+  $info = variable_get('entity_view_count_track_' . $type);
+
+  if (!$info[$view_mode]) {
+    return;
+  }
+
   entity_view_count_create(array('entity_type' => $type, 'entity' => $entity))->save();
 }
 
@@ -127,13 +133,14 @@ function entity_view_count_entity_view($entity, $type, $view_mode, $langcode) {
  * Form callback; Set the settings for the module.
  */
 function entity_view_count_settings($form, $form_state) {
-  $form['visibility'] = array(
+  $form['track'] = array(
     '#type' => 'vertical_tabs',
   );
 
   $entities = entity_get_info();
 
   foreach ($entities as $name => $entity) {
+
     if (empty($entity['view modes'])) {
       continue;
     }
@@ -152,6 +159,7 @@ function entity_view_count_settings($form, $form_state) {
     $default_views = array();
 
     foreach ($selected as $view_mode_name => $select) {
+
       if (!$select) {
         continue;
       }
