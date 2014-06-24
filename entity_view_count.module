@@ -94,7 +94,7 @@ function entity_view_count_load_multiple(array $ids) {
  * Delete multiple entity view count entries from the DB.
  *
  * @param Integer $ids
- *  List of ids.s
+ *  List of ids.
  */
 function entity_view_count_delete_multiple($ids) {
   entity_delete_multiple('entity_view_count', $ids);
