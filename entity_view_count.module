@@ -180,3 +180,36 @@ function entity_view_count_settings($form, $form_state) {
 
   return system_settings_form($form);
 }
+
+/**
+ * Implements hook_field_extra_fields().
+ *
+ * Giving the option to display the render
+ *
+ */
+function entity_view_count_field_extra_fields() {
+  $entities = entity_get_info();
+
+  $extra_fields = array();
+
+  $display_elements['created'] = array(
+    'label' => t('Number of views'),
+    'weight' => 0,
+  );
+
+  foreach ($entities as $key => $entity) {
+
+    if (!$entity['fieldable']) {
+      continue;
+    }
+
+    $params['@entity'] = $entity['label'];
+    $display_elements['created']['description'] = t('Collect the amount of views for @entity', $params);
+
+    foreach (array_keys($entity['bundles']) as $bundle) {
+      $extra_fields[$key][$bundle]['display'] = $display_elements;
+    }
+  }
+
+  return $extra_fields;
+}
