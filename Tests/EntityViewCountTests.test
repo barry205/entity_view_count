@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Contains simple test for entity view count module.
+ */
+
+class EntityViewCountTests extends DrupalWebTestCase {
+
+  /**
+   * @var
+   */
+  protected $node;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Entity view count.',
+      'description' => 'Testing the basic functionality of the entity view count module.',
+      'group' => 'Entity view count',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp();
+
+    $contentType = $this->drupalCreateContentType();
+    $this->node = entity_create('node', array('type' => $contentType->type, 'title' => 'Dummy node.'));
+//    node_save($this->node);
+
+    debug($this->node);
+  }
+
+
+  public function testEntityViewCount() {
+    $this->pass('a');
+  }
+
+}
