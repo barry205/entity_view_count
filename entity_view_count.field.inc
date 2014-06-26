@@ -103,7 +103,6 @@ function entity_view_count_field_formatter_view($entity_type, $entity, $field, $
       ->execute();
   }
 
-
   return array(
     '0' => array('#markup' => $result),
   );
