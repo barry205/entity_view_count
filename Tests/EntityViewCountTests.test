@@ -28,14 +28,13 @@ class EntityViewCountTests extends DrupalWebTestCase {
 
     $contentType = $this->drupalCreateContentType();
     $this->node = entity_create('node', array('type' => $contentType->type, 'title' => 'Dummy node.'));
-//    node_save($this->node);
 
     debug($this->node);
   }
 
 
   public function testEntityViewCount() {
-    $this->pass('a');
+    $this->fail('a');
   }
 
 }
