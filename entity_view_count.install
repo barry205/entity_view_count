@@ -59,6 +59,29 @@ function entity_view_count_schema() {
 }
 
 /**
+ * Implements hook_install().
+ *
+ * Turn on default view modes for entities.
+ */
+function entity_view_count_install() {
+  $entities = entity_get_info();
+
+  foreach ($entities as $name => $entity) {
+
+    if (empty($entity['view modes'])) {
+      continue;
+    }
+
+    foreach (array_keys($entity['view modes']) as $view_mode_name) {
+
+      if ($view_mode_name == 'full') {
+        variable_set('entity_view_count_track_' . $name, array('full' => 'full'));
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_uninstall().
  */
 function entity_view_count_uninstall() {
