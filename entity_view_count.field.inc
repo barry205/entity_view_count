@@ -44,6 +44,10 @@ function entity_view_count_field_formatter_info() {
       'label' => t('Entity view count default'),
       'field types' => array('entity_view_count'),
     ),
+    'entity_view_count_user' => array(
+      'label' => t('User entities view count'),
+      'field types' => array('entity_view_count'),
+    ),
   );
 }
 
@@ -58,7 +62,6 @@ function entity_view_count_field_is_empty($item, $field) {
  * Implements hook_field_prepare_view().
  */
 function entity_view_count_field_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items) {
-
   if ($field['type'] != 'entity_view_count') {
     return;
   }
@@ -74,20 +77,32 @@ function entity_view_count_field_prepare_view($entity_type, $entities, $field, $
  * Implements hook_field_formatter_view().
  */
 function entity_view_count_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-
-  if ($display['type'] != 'entity_view_count_default') {
-    return array();
-  }
-
   $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
-  $query = new EntityFieldQuery();
-  $result = $query
-    ->entityCondition('entity_type', 'entity_view_count')
-    ->propertyCondition('entity_type', $entity_type)
-    ->propertyCondition('entity_id', $wrapper->getIdentifier())
-    ->count()
-    ->execute();
+  if ($display['type'] == 'entity_view_count_default') {
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'entity_view_count')
+      ->propertyCondition('entity_type', $entity_type)
+      ->propertyCondition('entity_id', $wrapper->getIdentifier())
+      ->count()
+      ->execute();
+  }
+  else {
+
+    if ($wrapper->type() != 'user') {
+      drupal_set_message(t('The formatter "User entities view count" can by applied only to user'), 'warning');
+      return array();
+    }
+
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'entity_view_count')
+      ->propertyCondition('uid', $wrapper->getIdentifier())
+      ->count()
+      ->execute();
+  }
+
 
   return array(
     '0' => array('#markup' => $result),
