@@ -8,6 +8,7 @@ dependencies[] = entity
 dependencies[] = entityreference
 
 ; Views handlers.
+files[] = includes/views/handlers/EntityUserViewCountSort.inc
 files[] = includes/views/handlers/EntityViewCountSort.inc
 
 ; Entity files.
