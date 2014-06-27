@@ -14,7 +14,7 @@ view mode display of any entity. You can change that in
 admin/config/system/entity_view_count.
 
 Features
-===
+========
 if you'd like to display info for given node or entity you can attache the field
  "Entity view count". The field have two formats:
 
@@ -23,4 +23,3 @@ if you'd like to display info for given node or entity you can attache the field
 * User entities view count - This formatter can be attached only for a user
   entity. This will display how many times the user's entities was viewed i.e:
   how many times the user's nodes, comments, and terms was viewed by any user.
-  
