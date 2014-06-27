@@ -37,6 +37,16 @@ function entity_view_count_permission() {
 }
 
 /**
+ * Implements hook_view_api().
+ */
+function entity_view_count_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'entity_view_count') . '/includes/views',
+  );
+}
+
+/**
  * Implement hook_entity_info().
  */
 function entity_view_count_entity_info() {
@@ -50,6 +60,8 @@ function entity_view_count_entity_info() {
     'entity keys' => array(
       'id' => 'id',
     ),
+    'metadata controller class' => 'EntityDefaultMetadataController',
+    'views controller class' => 'EntityDefaultViewsController',
   );
 
   return $info;
