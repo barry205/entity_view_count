@@ -2,7 +2,8 @@
 
 /**
  * @file
- * Contains a sorting handler.
+ * Contains a sorting handler for sort the users by the number of their viewed
+ * entities.
  */
 
 class EntityViewCountSort extends views_handler_sort {
@@ -12,5 +13,11 @@ class EntityViewCountSort extends views_handler_sort {
    */
   function query() {
     $this->ensure_my_table();
+
+    $this->query->orderby[] = array(
+      'field' => "(SELECT count(*) FROM `entity_view_count` WHERE uid = users.uid)",
+      'direction' => $this->options['order'],
+    );
   }
+
 }
