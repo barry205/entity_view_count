@@ -23,3 +23,5 @@ if you'd like to display info for given node or entity you can attache the field
 * User entities view count - This formatter can be attached only for a user
   entity. This will display how many times the user's entities was viewed i.e:
   how many times the user's nodes, comments, and terms was viewed by any user.
+* When displaying a list of users you can sort the users by the number of their
+  viewed entities.

@@ -7,12 +7,12 @@ function entity_view_count_views_data() {
 
   $data['users']['entity_view_count'] = array(
     'title'  => t('users viewed entity'),
-    'help' => t('Order the users by the number of their viewed posts.'),
+    'help' => t('Order the users by the number of their viewed entities.'),
 
     'relationship' => array(
       'title' => t('Entity view count'),
       'label'  => t('Entity view count: users viewed entity'),
-      'help' => t('Order the users by the number of their viewed posts.'),
+      'help' => t('Order the users by the number of their viewed entities.'),
       'handler' => 'views_handler_relationship',
       'base' => 'entity_view_count',
       'field' => 'uid',
