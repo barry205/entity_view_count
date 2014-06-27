@@ -8,13 +8,19 @@
 class EntityViewCountTests extends DrupalWebTestCase {
 
   /**
-   * @var
+   * @var \stdClass
+   *
+   * The node object.
    */
   protected $node;
 
   /**
-   * {@inheritdoc}
+   * @var
+   *
+   * The user object.
    */
+  protected $user;
+
   public static function getInfo() {
     return array(
       'name' => 'Entity view count.',
@@ -23,18 +29,40 @@ class EntityViewCountTests extends DrupalWebTestCase {
     );
   }
 
+  /**
+   * Overrides parent::setUp().
+   */
   public function setUp() {
-    parent::setUp();
+    parent::setUp(array('entity_view_count'));
+
+    $this->user = $this->drupalCreateUser();
 
     $contentType = $this->drupalCreateContentType();
-    $this->node = entity_create('node', array('type' => $contentType->type, 'title' => 'Dummy node.'));
+    $this->node = $this->drupalCreateNode(array('type' => $contentType->type, 'uid' => $this->user->uid));
+  }
 
-    debug($this->node);
+  /**
+   * Visit the node a defined number of times.
+   *
+   * @param $times
+   *  The number of times.
+   */
+  private function visitNumberOfTimes($times) {
+    for ($i = 0; $i < $times; $i++) {
+      $this->drupalGet('node/' . $this->node->nid);
+    }
   }
 
 
+  /**
+   * Verifying the number of times that a node was viewed and the number of
+   * times the users entity was viewed. They both need to be 5.
+   */
   public function testEntityViewCount() {
-    $this->fail('a');
-  }
+    // Visit the the node multiple times by a guest.
+    $this->visitNumberOfTimes(5);
 
+    $this->assertTrue(entity_view_count_get_entity_counts('node', $this->node->nid) == 5, 'The node was viewed 5 times.');
+    $this->assertTrue(entity_view_count_get_entity_counts('node', $this->node->nid) == 5, 'The user\'s viewed 5 times.');
+  }
 }

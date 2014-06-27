@@ -124,7 +124,7 @@ function entity_view_count_delete_multiple($ids) {
 function entity_view_count_entity_view($entity, $type, $view_mode, $langcode) {
   $info = variable_get('entity_view_count_track_' . $type);
 
-  if (!$info[$view_mode]) {
+  if (empty($info[$view_mode])) {
     return;
   }
 
@@ -181,4 +181,44 @@ function entity_view_count_settings($form, $form_state) {
   }
 
   return system_settings_form($form);
+}
+
+/**
+ * Get the number of times the entity was viewed.
+ *
+ * @param String $entity_type
+ *  The entity type.
+ * @param Integer $entity_id
+ *  The entity ID.
+ *
+ * @return Integer
+ *  The number of times the entity was viewed.
+ */
+function entity_view_count_get_entity_counts($entity_type, $entity_id) {
+  $query = new EntityFieldQuery();
+  return $query
+    ->entityCondition('entity_type', 'entity_view_count')
+    ->propertyCondition('entity_type', $entity_type)
+    ->propertyCondition('entity_id', $entity_id)
+    ->count()
+    ->execute();
+}
+
+/**
+ * Get the number of time the user entities was viewed.
+ *
+ * @param Integer $uid
+ *  The user ID.
+ *
+ * @return Integer
+ *  The number of times the user's entity was viewed.
+ */
+function entity_view_count_get_user_entity_counts($uid) {
+  $query = new EntityFieldQuery();
+  return $query
+    ->entityCondition('entity_type', 'entity_view_count')
+    ->propertyCondition('entity_type', 'user')
+    ->propertyCondition('entity_id', $uid)
+    ->count()
+    ->execute();
 }

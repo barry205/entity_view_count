@@ -80,13 +80,7 @@ function entity_view_count_field_formatter_view($entity_type, $entity, $field, $
   $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
   if ($display['type'] == 'entity_view_count_default') {
-    $query = new EntityFieldQuery();
-    $result = $query
-      ->entityCondition('entity_type', 'entity_view_count')
-      ->propertyCondition('entity_type', $entity_type)
-      ->propertyCondition('entity_id', $wrapper->getIdentifier())
-      ->count()
-      ->execute();
+    $result = entity_view_count_get_entity_counts($entity_type, $wrapper->getIdentifier());
   }
   else {
 
@@ -95,16 +89,10 @@ function entity_view_count_field_formatter_view($entity_type, $entity, $field, $
       return array();
     }
 
-    $query = new EntityFieldQuery();
-    $result = $query
-      ->entityCondition('entity_type', 'entity_view_count')
-      ->propertyCondition('uid', $wrapper->getIdentifier())
-      ->count()
-      ->execute();
+    $result = entity_view_count_get_user_entity_counts($wrapper->getIdentifier());
   }
 
   return array(
     '0' => array('#markup' => $result),
   );
-
 }
