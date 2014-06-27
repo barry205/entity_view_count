@@ -217,8 +217,7 @@ function entity_view_count_get_user_entity_counts($uid) {
   $query = new EntityFieldQuery();
   return $query
     ->entityCondition('entity_type', 'entity_view_count')
-    ->propertyCondition('entity_type', 'user')
-    ->propertyCondition('entity_id', $uid)
+    ->propertyCondition('uid', $uid)
     ->count()
     ->execute();
 }

@@ -35,10 +35,17 @@ class EntityViewCountTests extends DrupalWebTestCase {
   public function setUp() {
     parent::setUp(array('entity_view_count'));
 
-    $this->user = $this->drupalCreateUser();
+    // Disable counter for user page.
+    variable_del('entity_view_count_track_user');
+
+    $this->user = $this->drupalCreateUser(array('access content', 'access user profiles'));
+    $this->drupalLogin($this->user);
 
     $contentType = $this->drupalCreateContentType();
     $this->node = $this->drupalCreateNode(array('type' => $contentType->type, 'uid' => $this->user->uid));
+
+    // Visit the the node multiple times by a guest.
+    $this->visitNumberOfTimes(5);
   }
 
   /**
@@ -53,16 +60,104 @@ class EntityViewCountTests extends DrupalWebTestCase {
     }
   }
 
-
   /**
    * Verifying the number of times that a node was viewed and the number of
    * times the users entity was viewed. They both need to be 5.
    */
   public function testEntityViewCount() {
-    // Visit the the node multiple times by a guest.
-    $this->visitNumberOfTimes(5);
-
     $this->assertTrue(entity_view_count_get_entity_counts('node', $this->node->nid) == 5, 'The node was viewed 5 times.');
-    $this->assertTrue(entity_view_count_get_entity_counts('node', $this->node->nid) == 5, 'The user\'s viewed 5 times.');
+    $this->assertTrue(entity_view_count_get_user_entity_counts($this->user->uid) == 5, 'The user\'s viewed 5 times.');
+  }
+
+  /**
+   * Verifying the field value when displaying him.
+   */
+  function testFieldValue() {
+    // Attaching the field for node and a user.
+    field_create_field(array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'field_entity_view_count',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'entity_view_count',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'entity_view_count',
+    ));
+
+    // Attaching the field for node.
+    field_create_instance(array(
+      'bundle' => $this->node->type,
+      'default_value' => NULL,
+      'deleted' => 0,
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'inline',
+          'module' => 'entity_view_count',
+          'settings' => array(),
+          'type' => 'entity_view_count_default',
+          'weight' => 11,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_entity_view_count',
+      'label' => 'Entity view count',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'entity_view_count',
+        'settings' => array(),
+        'type' => 'entity_view_count_default',
+        'weight' => 0,
+      ),
+    ));
+
+    // Attaching the field for user.
+    field_create_instance(array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => 0,
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'inline',
+          'module' => 'entity_view_count',
+          'settings' => array(),
+          'type' => 'entity_view_count_user',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_entity_view_count',
+      'label' => 'Entity view count',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => 0,
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'entity_view_count',
+        'settings' => array(),
+        'type' => 'entity_view_count_default',
+        'weight' => 8,
+      ),
+    ));
+
+    // Verifying the
+    $this->drupalGet('node/' . $this->node->nid);
+    $field = $this->xpath("//div[contains(@class, 'field-type-entity-view-count')]//div[@class='field-items']//div[.='5']");
+    $this->assertTrue($field, 'The field is 5.');
+
+    $this->drupalGet('user/' . $this->user->uid);
+    $field = $this->xpath("//div[contains(@class, 'field-type-entity-view-count')]//div[@class='field-items']//div[.='6']");
+    $this->assertTrue($field, 'The field is 6.');
   }
 }
