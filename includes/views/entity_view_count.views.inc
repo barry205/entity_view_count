@@ -7,7 +7,7 @@ function entity_view_count_views_data() {
 
   $data['users']['entity_view_count'] = array(
     'title'  => t('User entity view count'),
-    'help'  => t('Create relationship for sorting the users by the number of their viewed entities.'),
+    'help'  => t('Create relationship for sorting the users by their entities views amount.'),
 
     'relationship' => array(
       'handler' => 'views_handler_relationship',
@@ -27,7 +27,7 @@ function entity_view_count_views_data() {
 
     $data[$info['base table']][$key . '_entity_view_count'] = array(
       'title'  => t('@label\'s view count', array('@label' => $info['label'])),
-      'help' => t('Create relationship for sorting the entities by their views number.'),
+      'help' => t('Create relationship for sorting the entities by their views amount.'),
 
       'relationship' => array(
         'handler' => 'views_handler_relationship',
