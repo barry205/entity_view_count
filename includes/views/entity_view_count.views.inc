@@ -5,19 +5,7 @@
  */
 function entity_view_count_views_data() {
 
-  $data['users']['entity_view_count'] = array(
-    'title'  => t('User entity view count'),
-    'help'  => t('Create relationship for sorting the users by their entities views amount.'),
-
-    'relationship' => array(
-      'handler' => 'views_handler_relationship',
-      'base' => 'entity_view_count',
-      'field' => 'uid',
-    ),
-    'sort' => array(
-      'handler' => 'EntityUserViewCountSort',
-    ),
-  );
+  $data = array();
 
   foreach (entity_get_info() as $key => $info) {
 
@@ -34,12 +22,17 @@ function entity_view_count_views_data() {
         'base' => 'entity_view_count',
         'field' => $info['entity keys']['id'],
       ),
-
-      'sort' => array(
-        'handler' => 'EntityViewCountSort',
-      ),
     );
   }
+
+  $data['entity_view_count']['order'] = array(
+    'title' => t('Entity view count sort results'),
+    'help' => t('Sort result by various entity view count settings.'),
+
+    'sort' => array(
+      'handler' => 'EntityViewCountSort',
+    ),
+  );
 
   return $data;
 }
