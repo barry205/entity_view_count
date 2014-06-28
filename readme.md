@@ -3,7 +3,7 @@
 Entity view count
 =========
 The entity view count designed tracking views of entities. Unlike the
-[Node view count](http://www.drupal.org/project/node_view_count), Entity view
+[Node view count](http://www.drupal.org/project/nodeviewcount), Entity view
 count can track views of entity for a specific view modes and can also display
 how much the users entities viewed for a specific user.
 
@@ -25,3 +25,6 @@ if you'd like to display info for given node or entity you can attache the field
   how many times the user's nodes, comments, and terms was viewed by any user.
 * When displaying a list of users you can sort the users by the number of their
   viewed entities.
+* When displaying a list of entities you can sort them by the amount of times
+  there were viewed. The best use case is to display in a view the most viewed
+  node/comment/term
