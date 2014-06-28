@@ -66,7 +66,7 @@ class EntityViewCountTests extends DrupalWebTestCase {
    */
   public function testEntityViewCount() {
     $this->assertTrue(entity_view_count_get_entity_counts('node', $this->node->nid) == 5, 'The node was viewed 5 times.');
-    $this->assertTrue(entity_view_count_get_user_entity_counts($this->user->uid) == 5, 'The user\'s viewed 5 times.');
+    $this->assertTrue(entity_view_count_user_entities_count($this->user->uid) == 5, 'The user\'s viewed 5 times.');
   }
 
   /**

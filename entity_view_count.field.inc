@@ -79,17 +79,20 @@ function entity_view_count_field_prepare_view($entity_type, $entities, $field, $
 function entity_view_count_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
-  if ($display['type'] == 'entity_view_count_default') {
-    $result = entity_view_count_get_entity_counts($entity_type, $wrapper->getIdentifier());
-  }
-  else {
+  switch ($display['type']) {
+    case 'entity_view_count_user':
+      if ($wrapper->type() != 'user') {
+        drupal_set_message(t('The formatter "User entities view count" can by applied only to user'), 'warning');
+        return array();
+      }
 
-    if ($wrapper->type() != 'user') {
-      drupal_set_message(t('The formatter "User entities view count" can by applied only to user'), 'warning');
-      return array();
-    }
+      $result = entity_view_count_user_entities_count($wrapper->getIdentifier());
+      break;
 
-    $result = entity_view_count_get_user_entity_counts($wrapper->getIdentifier());
+    case 'entity_view_count_default':
+    default:
+      $result = entity_view_count_get_entity_counts($entity_type, $wrapper->getIdentifier());
+      break;
   }
 
   return array(

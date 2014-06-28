@@ -144,7 +144,9 @@ function entity_view_count_entity_view($entity, $type, $view_mode, $langcode) {
     'entity_type' => $type,
     'entity' => $entity,
     'view_mode' => $view_mode,
+    'entity_owner' => $entity->uid,
   );
+
   entity_view_count_create($params)->save();
 }
 
@@ -222,15 +224,15 @@ function entity_view_count_get_entity_counts($entity_type, $entity_id) {
 }
 
 /**
- * Get the number of time the user entities was viewed.
+ * Get the number of times the user view entities.
  *
  * @param Integer $uid
  *  The user ID.
  *
  * @return Integer
- *  The number of times the user's entity was viewed.
+ *  The number of times the user viewed entities.
  */
-function entity_view_count_get_user_entity_counts($uid) {
+function entity_view_count_user_entities_count($uid) {
   $query = new EntityFieldQuery();
   return $query
     ->entityCondition('entity_type', 'entity_view_count')
