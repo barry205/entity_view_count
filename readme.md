@@ -8,13 +8,13 @@ count can track views of entity for a specific view modes and can also display
 how much the users entities viewed for a specific user.
 
 Instructions
-========
+=========
 Install the module like any other module. By default the module track any full
 view mode display of any entity. You can change that in
 admin/config/system/entity_view_count.
 
 Features
-========
+=========
 if you'd like to display info for given node or entity you can attache the field
  "Entity view count". The field have two formats:
 
