@@ -140,7 +140,12 @@ function entity_view_count_entity_view($entity, $type, $view_mode, $langcode) {
     return;
   }
 
-  entity_view_count_create(array('entity_type' => $type, 'entity' => $entity))->save();
+  $params = array(
+    'entity_type' => $type,
+    'entity' => $entity,
+    'view_mode' => $view_mode,
+  );
+  entity_view_count_create($params)->save();
 }
 
 /**

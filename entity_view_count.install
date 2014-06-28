@@ -23,7 +23,7 @@ function entity_view_count_schema() {
       'entity_type' => array(
         'description' => 'The entity type.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 32,
         'not null' => TRUE,
         'default' => '',
       ),
@@ -32,6 +32,19 @@ function entity_view_count_schema() {
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
+      ),
+      'entity_owner' => array(
+        'description' => 'The entity owner ID.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'display_mode' => array(
+        'description' => 'The view mode when the entity was viewed.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
       ),
       'created' => array(
         'description' => 'The Unix timestamp when the entity was viewed.',
