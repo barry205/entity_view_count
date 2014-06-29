@@ -140,7 +140,14 @@ function entity_view_count_entity_view($entity, $type, $view_mode, $langcode) {
     return;
   }
 
-  entity_view_count_create(array('entity_type' => $type, 'entity' => $entity))->save();
+  $params = array(
+    'entity_type' => $type,
+    'entity' => $entity,
+    'view_mode' => $view_mode,
+    'entity_owner' => $entity->uid,
+  );
+
+  entity_view_count_create($params)->save();
 }
 
 /**
@@ -206,7 +213,7 @@ function entity_view_count_settings($form, $form_state) {
  * @return Integer
  *  The number of times the entity was viewed.
  */
-function entity_view_count_get_entity_counts($entity_type, $entity_id) {
+function entity_view_count_get_entity_count($entity_type, $entity_id) {
   $query = new EntityFieldQuery();
   return $query
     ->entityCondition('entity_type', 'entity_view_count')
@@ -217,19 +224,58 @@ function entity_view_count_get_entity_counts($entity_type, $entity_id) {
 }
 
 /**
- * Get the number of time the user entities was viewed.
+ * Get the number of times the user view entities.
  *
  * @param Integer $uid
  *  The user ID.
  *
  * @return Integer
- *  The number of times the user's entity was viewed.
+ *  The number of times the user viewed entities.
  */
-function entity_view_count_get_user_entity_counts($uid) {
+function entity_view_count_user_viewing_entities_count($uid) {
   $query = new EntityFieldQuery();
   return $query
     ->entityCondition('entity_type', 'entity_view_count')
     ->propertyCondition('uid', $uid)
     ->count()
     ->execute();
+}
+
+/**
+ * Count how much the users owned entities were viewed.
+ *
+ * @param Integer $uid
+ *  The user ID.
+ *
+ * @return integer
+ *  The amount of times the user owned entities were viewed.
+ */
+function entity_view_count_user_owned_entity_count($uid) {
+  $query = new EntityFieldQuery();
+  return $query
+    ->entityCondition('entity_type', 'entity_view_count')
+    ->propertyCondition('entity_owner', $uid)
+    ->count()
+    ->execute();
+}
+
+/**
+ * Implements hook_entity_delete().
+ *
+ * Delete any entries relate to the delete entity.
+ */
+function entity_view_count_entity_delete($entity, $type) {
+  $wrapper = entity_metadata_wrapper($type, $entity);
+  $query = new EntityFieldQuery();
+  $results = $query
+    ->entityCondition('entity_type', 'entity_view_count')
+    ->propertyCondition('entity_type', $type)
+    ->propertyCondition('entity_id', $wrapper->getIdentifier())
+    ->execute();
+
+  if (empty($results['entity_view_count'])) {
+    return;
+  }
+
+  entity_delete_multiple('entity_view_count', array_keys($results['entity_view_count']));
 }
