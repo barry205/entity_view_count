@@ -258,3 +258,24 @@ function entity_view_count_user_owned_entity_count($uid) {
     ->count()
     ->execute();
 }
+
+/**
+ * Implements hook_entity_delete().
+ *
+ * Delete any entries relate to the delete entity.
+ */
+function entity_view_count_entity_delete($entity, $type) {
+  $wrapper = entity_metadata_wrapper($type, $entity);
+  $query = new EntityFieldQuery();
+  $results = $query
+    ->entityCondition('entity_type', 'entity_view_count')
+    ->propertyCondition('entity_type', $type)
+    ->propertyCondition('entity_id', $wrapper->getIdentifier())
+    ->execute();
+
+  if (empty($results['entity_view_count'])) {
+    return;
+  }
+
+  entity_delete_multiple('entity_view_count', array_keys($results['entity_view_count']));
+}
