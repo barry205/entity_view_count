@@ -13,4 +13,4 @@ files[] = includes/views/handlers/EntityViewCountSort.inc
 files[] = includes/EntityViewCount.php
 
 ; Tests files.
-files[] = Tests/EntityViewCountTests.test
+files[] = tests/EntityViewCountTests.test

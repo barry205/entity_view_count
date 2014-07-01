@@ -123,7 +123,7 @@ function entity_view_count_load_multiple(array $ids) {
 /**
  * Delete multiple entity view count entries from the DB.
  *
- * @param Integer $ids
+ * @param Array $ids
  *  List of ids.
  */
 function entity_view_count_delete_multiple($ids) {
@@ -277,5 +277,5 @@ function entity_view_count_entity_delete($entity, $type) {
     return;
   }
 
-  entity_delete_multiple('entity_view_count', array_keys($results['entity_view_count']));
+  entity_view_count_delete_multiple(array_keys($results['entity_view_count']));
 }
