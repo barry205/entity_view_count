@@ -144,7 +144,7 @@ function entity_view_count_entity_view($entity, $type, $view_mode, $langcode) {
     'entity_type' => $type,
     'entity' => $entity,
     'view_mode' => $view_mode,
-    'entity_owner' => $entity->uid,
+    'entity_owner' => !empty($entity->uid) ? $entity->uid : 0,
   );
 
   entity_view_count_create($params)->save();
@@ -278,4 +278,13 @@ function entity_view_count_entity_delete($entity, $type) {
   }
 
   entity_view_count_delete_multiple(array_keys($results['entity_view_count']));
+}
+
+/**
+ * Implement hook_ctools_plugin_directory().
+ */
+function entity_view_count_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools') {
+    return 'plugins/' . $plugin;
+  }
 }
