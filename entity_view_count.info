@@ -8,6 +8,7 @@ dependencies[] = entity
 
 ; Views handlers.
 files[] = includes/views/handlers/EntityViewCountSort.inc
+files[] = includes/views/handlers/EntityViewCountIncreaseCounterHandler.inc
 
 ; Entity files.
 files[] = includes/EntityViewCount.php

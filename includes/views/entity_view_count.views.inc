@@ -23,6 +23,15 @@ function entity_view_count_views_data() {
         'field' => $info['entity keys']['id'],
       ),
     );
+
+    $data[$info['base table']][$key . '_entity_view_count_increase'] = array(
+      'title'  => t('Increase count for @label', array('@label' => $info['label'])),
+      'help' => t('When using field mode instead of rendered entity this field will create an entity view count entry.'),
+
+      'field' => array(
+        'handler' => 'EntityViewCountIncreaseCounterHandler',
+      ),
+    );
   }
 
   $data['entity_view_count']['order'] = array(
