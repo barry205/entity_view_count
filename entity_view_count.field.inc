@@ -81,6 +81,10 @@ function entity_view_count_field_prepare_view($entity_type, $entities, $field, $
  * Implements hook_field_formatter_view().
  */
 function entity_view_count_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  if (!user_access('view entity view count field')) {
+    return array();
+  }
+
   $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
   switch ($display['type']) {

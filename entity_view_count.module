@@ -33,6 +33,10 @@ function entity_view_count_permission() {
       'title' => t('Administer entity view count entries'),
       'description' => t('Grant permission to manage entity view count entries'),
     ),
+    'view entity view count field' => array(
+      'title' => t('View entity view count field'),
+      'description' => t('Allow to the user watch the entity view count values.'),
+    ),
   );
 }
 

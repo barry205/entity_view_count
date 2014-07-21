@@ -53,8 +53,8 @@ class EntityViewCountTests extends DrupalWebTestCase {
     variable_del('entity_view_count_track_user');
 
     // Creating the users.
-    $this->user1 = $this->drupalCreateUser(array('access content', 'access user profiles'));
-    $this->user2 = $this->drupalCreateUser(array('access content', 'access user profiles'));
+    $this->user1 = $this->drupalCreateUser(array('access content', 'access user profiles', 'view entity view count field'));
+    $this->user2 = $this->drupalCreateUser(array('access content', 'access user profiles', 'view entity view count field'));
 
     // Creating content types and his instances.
     $contentType = $this->drupalCreateContentType();
