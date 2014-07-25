@@ -311,14 +311,38 @@ function entity_view_count_generate_views($form, $form_state) {
   $options = array();
 
   foreach (entity_get_info() as $type => $info) {
+    if ($type == 'entity_view_count') {
+      // Don't generate entity view counts for entity view count.
+      continue;
+    }
     $options[$type] = $info['label'];
   }
 
-  $form['entity_types'] = array(
+  $form['entity_type'] = array(
     '#type' => 'select',
     '#title' => t('Select entity types'),
     '#description' => t('Select the entity types which we need to generate and generate view for.'),
     '#options' => $options,
+  );
+
+  $form['amount_of_entities'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Amount of entities'),
+    '#description' => t('How much entities to create'),
+  );
+
+  $form['maximum_count_view'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum number of count view for each entity'),
+    '#description' => t('Determine how much view count to add for each entity.'),
+  );
+
+  $form['actions'] = array(
+    '#type' => 'actions',
+    'submit' => array(
+      '#type' => 'submit',
+      '#value' => t('Generate'),
+    )
   );
 
   return $form;
@@ -328,5 +352,16 @@ function entity_view_count_generate_views($form, $form_state) {
  * Submit handler; Generating view counts according to the form settings.
  */
 function entity_view_count_generate_views_submit($form, $form_state) {
+  $values = $form_state['values'];
 
+  $entity_info = entity_get_info($values['entity_type']);
+
+  // Create the entity object.
+  dpm($entity_info);
+
+  $entity = new EntityGenerator($entity_info);
+  $entity
+    ->generateProperties()
+    ->GenerateFields()
+    ->save();
 }

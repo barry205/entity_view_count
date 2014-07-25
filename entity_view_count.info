@@ -12,6 +12,7 @@ files[] = includes/views/handlers/EntityViewCountIncreaseCounterHandler.inc
 
 ; Entity files.
 files[] = includes/EntityViewCount.php
+files[] = includes/EntityGenerator.inc
 
 ; Tests files.
 files[] = tests/EntityViewCountTests.test
