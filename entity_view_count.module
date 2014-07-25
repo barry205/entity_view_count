@@ -21,6 +21,16 @@ function entity_view_count_menu() {
     'access arguments' => array('administer entity view count entries'),
   );
 
+  if (module_exists('devel_generate')) {
+    $items['admin/config/development/generate/content'] = array(
+      'title' => 'Generate entity view count entries',
+      'description' => 'Generate a given number of views for specific entities.',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('entity_view_count_generate_views'),
+      'access arguments' => array('administer entity view count entries'),
+    );
+  }
+
   return $items;
 }
 
@@ -291,4 +301,32 @@ function entity_view_count_ctools_plugin_directory($module, $plugin) {
   if ($module == 'ctools') {
     return 'plugins/' . $plugin;
   }
+}
+
+/**
+ * Generating entity view counts.
+ */
+function entity_view_count_generate_views($form, $form_state) {
+
+  $options = array();
+
+  foreach (entity_get_info() as $type => $info) {
+    $options[$type] = $info['label'];
+  }
+
+  $form['entity_types'] = array(
+    '#type' => 'select',
+    '#title' => t('Select entity types'),
+    '#description' => t('Select the entity types which we need to generate and generate view for.'),
+    '#options' => $options,
+  );
+
+  return $form;
+}
+
+/**
+ * Submit handler; Generating view counts according to the form settings.
+ */
+function entity_view_count_generate_views_submit($form, $form_state) {
+
 }
