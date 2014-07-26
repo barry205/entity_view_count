@@ -359,9 +359,10 @@ function entity_view_count_generate_views_submit($form, $form_state) {
   // Create the entity object.
   dpm($entity_info);
 
-  $entity = new EntityGenerator($entity_info);
+  $entity = new EntityGenerator($values['entity_type']);
   $entity
     ->generateProperties()
-    ->GenerateFields()
-    ->save();
+    ->GenerateFields();
+
+//    ->save();
 }
